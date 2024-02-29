@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="main.css" />
+    <title>Profi contract</title>
+    <script defer src="node_modules/web3/dist/web3.min.js"></script>
+    <script defer src="node_modules/ethers/dist/ethers.min.js"></script>
+   <script defer src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script defer src="index.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <div class="header-left">Solidity</div>
+          <div class="header-right">
+            <a href="#" class="nav-link" data-target="tokens">Токены</a>
+            <a href="#" class="nav-link nav-marketplace" data-target="marketplace">Торговая площадка</a>
+            <a href="#" class="nav-link nav-auctions" data-target="auctions">Аукционы</a>
+          </div>
+        </div>
+      </div>
+      </header>
+    <div class="container">
+      
+      <div class="mb-4">
+        <label for="user">Выберите пользователя:</label>
+        <select class="form-select select-min" id="user">
+          <option selected value="none">Выбрать</option>
+        </select>
+        <p class="selected-user">Выбранный Пользователь:</p>
+        <p id="balance">Ваш баланс: <span></span></p>
+        <div class="ref-div">
+          <p class="userRefCode">Ваш реферальный код:</p>
+          <button class="btn btn-primary" id="createRefCode">
+            Создать реферальный код
+          </button>
+        </div>
+        <div class="input-group mb-3 refCode-block">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="RefCode"
+            id="activateRefCodeInput"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="activateRefCodeBtn"
+            >
+              Активировать реф.код
+            </button>
+          </div>
+        </div>
+        <p class="refCodeBonus">Ваш реферальный бонус:</p>
+        <div id="nftSingleBlock">
+          <p class="userAllSingleNft">Айди ваших одиночных NFT:</p>
+          <p class="userAllCollection">Айди ваших коллекции NFT:</p>
+
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <input
+                type="number"
+                class="form-control"
+                placeholder="ID NFT"
+                id="nftIdInput"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button" id="viewNFTBtn">
+                  Просмотреть NFT
+                </button>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input
+                type="number"
+                class="form-control"
+                placeholder="ID NFT Collection"
+                id="nftCollectionIdInput"
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="viewNFTColectionBtn"
+                >
+                  Просмотреть NFT коллекцию
+                </button>
+              </div>
+              <p class="collection-id"></p>
+            </div>
+          </div>
+
+          <div class="NftList"></div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group mb-3 tokenManipulations">
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Количество"
+              id="quantity-tokens"
+            />
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button" id="buyTokensBtn">
+                Купить токены
+              </button>
+              <button class="btn btn-primary" type="button" id="sellTokensBtn">
+                Продать токены
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="create-nft-block">
+        <h4 class="create-nft-block__">Создание одиночного NFT</h4>
+        <form id="createNFTForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Название</label>
+            <input type="text" class="form-control" id="name" required />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Описание</label>
+            <input type="text" class="form-control" id="description" required />
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Цена за штуку</label>
+            <input type="number" class="form-control" id="price" required />
+          </div>
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Количество</label>
+            <input type="number" class="form-control" id="quantity" required />
+          </div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Путь к картинке</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="В виде ../img/first.jpg or jpeg/png"
+              id="image"
+              required
+            />
+          </div>
+          <button type="submit" id="create-nft__btn" class="btn btn-primary">Создать NFT</button>
+        </form>
+      </div>
+      <div class="create-nftCollection-block">
+        <h4 class="create-nft-block__">Создание коллекции NFT</h4>
+        <form id="createnftCollectionForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Имя</label>
+            <input
+              type="text"
+              class="form-control"
+              id="collectionName"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Описание</label>
+            <input
+              type="text"
+              class="form-control"
+              id="collectionDescription"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Массив айди nft</label>
+            <input type="text" class="form-control" id="idArray" required />
+          </div>
+          <div class="mb-3">
+            <label for="quantity" class="form-label"
+              >Массив количества nft</label
+            >
+            <input type="text" class="form-control" id="valueArray" required />
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Создать NFT коллекцию
+          </button>
+        </form>
+      </div>
+      <div class="mt-5 activelots-block">
+        <h4 class="activeLots__list">Все лоты</h4>
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="lotId"
+            placeholder="Введите айди лота"
+          />
+          <button type="submit" class="btn btn-primary showLots">
+            Посмотреть лот
+          </button>
+        </div>
+        <div class="mb-3">
+          <label for="nftId" class="form-label lot__nftId">Айди нфт:</label>
+        </div>
+        <div class="mb-3">
+          <label for="collectionId" class="form-label lot__collId"
+            >Айди коллекции(0 нету коллекции):</label
+          >
+        </div>
+        <div class="mb-3">
+          <label for="quantity" class="form-label lot__Value"
+            >Количество:</label
+          >
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label lot__Price">Цена:</label>
+        </div>
+        <div class="mb-3">
+          <label for="isActive" class="form-label lot__isActive"
+            >Активен:</label
+          >
+        </div>
+      </div>
+      <div class="sellNft-block">
+        <h4>Выставить NFT на продажу</h4>
+        <div class="mb-3">
+          <label for="nftId" class="form-label">Айди NFT</label>
+          <input
+            type="number"
+            class="form-control"
+            id="sellnftId"
+            placeholder="Введите айди NFT"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="collectionId" class="form-label">Айди Коллекции</label>
+          <input
+            type="number"
+            class="form-control"
+            id="sellcollectionId"
+            placeholder="Если одиночное то 0 оставьте"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="quantity" class="form-label">Количество</label>
+          <input
+            type="number"
+            class="form-control"
+            id="sellNftquantity"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Цена</label>
+          <input
+            type="number"
+            class="form-control"
+            id="sellNftprice"
+            required
+          />
+        </div>
+        <button type="" class="btn btn-primary sellNft__button">
+          Выставить на продажу
+        </button>
+      </div>
+      <div class="mt-5 buyNft-block">
+        <h4>Купить NFT</h4>
+        <div class="row mt-3">
+          <div class="col-8">
+            <input
+              type="number"
+              class="form-control"
+              id="lotId"
+              placeholder="Введите ID лота"
+            />
+          </div>
+          <div class="col-4">
+            <button type="button" class="btn btn-primary" id="buyLotBtn">
+              Купить лот
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="auctions">
+        <h3>Все аукционы</h4>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Id аукциона" />
+          <button  id="showAuction" class="btn btn-primary">Посмотреть аукцион</button>
+        </div>
+        <div class="auction-details">
+          <p class="idCollectionAuction">Id коллекции: </p>
+          <p class="idNftAuction">ID нфт в коллекции: </p>
+          <p class="valueNftAuction">Количество нфт: </p>
+          <p class="auctionCreatedTime" >Время создания: </p>
+          <p class="auctionStartedTime">Время старта: </p>
+          <p class="auctionStopedTime">Время конца: </p>
+          <p class="auctionMinPrice">Начальная цена: </p>
+          <p class="auctionMaxPrice">Максимальная цена: </p>
+          <p class="auctionMaxBet">Максимальная ставка: </p>
+          
+        </div>
+        <div class="input-group mb-3">
+        <button class="btn btn-primary">Поставить ставку</button>
+        <button class="btn btn-primary">Увеличить ставку</button>
+        <button class="btn btn-primary">Удалить ставки</button>
+        <button class="btn btn-primary">Завершить аукцион</button>
+      </div>
+      <h4>Создать аукцион</h4>
+      <div class="row">
+          <div class="col-md-6">
+              <label for="collectionId" class="form-label">Айди коллекции</label>
+              <input type="number" class="form-control" id="collectionId" placeholder="Введите айди коллекции">
+          </div>
+          <div class="col-md-6">
+              <label for="startPrice" class="form-label">Стартовая цена</label>
+              <input type="number" class="form-control" id="startPrice" placeholder="Введите стартовую цену">
+          </div>
+          <div class="col-md-6">
+              <label for="maxPrice" class="form-label">Максимальная цена</label>
+              <input type="number" class="form-control" id="maxPrice" placeholder="Введите максимальную цену">
+          </div>
+          <div class="col-md-6">
+              <label for="startTime" class="form-label">Время старта в секундах от времени создания</label>
+              <input type="number" class="form-control" id="startTime">
+          </div>
+          <div class="col-md-6">
+              <label for="endTime" class="form-label">Время конца в секундах от времени старта</label>
+              <input type="number" class="form-control" id="endTime">
+          </div>
+          <div class="col-12 mt-3">
+              <button type="button" class="btn btn-primary">Создать аукцион</button>
+          </div>
+      </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+       
+          <div class="col text-center">
+            <span class="text-white">Rednikov Lev</span>
+            <span class="text-white">Профессионалы</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

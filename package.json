@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "axios": "^1.6.7",
+    "ethers": "^6.10.0",
+    "https-localhost": "^4.7.1",
+    "live-server": "^1.2.2",
+    "web3": "^4.4.0"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "jquery": "^3.7.1",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.2"
+  }
+}
